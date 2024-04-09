@@ -262,7 +262,7 @@ Une application SPA (Single Page Application) est une application web qui ne rec
 
 Lorsque je parle d'"hydrater" les composants avec des états, je veux dire que React met à jour le DOM pour refléter les changements d'état des composants.
 
-Je préfère utiliser les composants de type fonction. Les composants de type classe ne sont pas abandonnés, mais ils sont moins utilisés car les Hooks de React permettent d'utiliser des fonctionnalités de l'état et du cycle de vie dans les composants fonctionnels.
+On préfère utiliser les composants de type fonction. Les composants de type classe ne sont pas abandonnés, mais ils sont moins utilisés car les Hooks de React permettent d'utiliser des fonctionnalités de l'état et du cycle de vie dans les composants fonctionnels.
 
 Dans un composant React, je ne peux renvoyer qu'un seul élément parent. Si j'ai besoin de renvoyer plusieurs éléments, je peux les envelopper dans un élément parent, ou utiliser un fragment React (`<>...</>`), qui est un élément parent invisible.
 
@@ -424,8 +424,12 @@ export default MonComponent;
 
 j'utilise l'index comme deuxième argument de la fonction de rappel dans la méthode `map`. Cela me permet d'accéder à l'index actuel de l'élément dans le tableau.
 
+**Listes et clés :**
+- https://fr.legacy.reactjs.org/docs/lists-and-keys.html
+
 > [!NOTE]
 > En JavaScript, l'opérateur de décomposition (`...`), aussi appelé **spread operator**, permet de prendre les éléments d'un tableau ou les propriétés d'un objet et de les utiliser individuellement. Par exemple, si vous avez un tableau `[1, 2, 3]` et que vous voulez créer un nouveau tableau qui contient tous ces éléments plus un nouvel élément, vous pouvez utiliser ... comme ceci : `[...[1, 2, 3], 4]`. Cela donne `[1, 2, 3, 4]`, où chaque élément du tableau original est utilisé individuellement pour créer le nouveau tableau.
+> https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/Spread_syntax
 
 - `index` est utilisé comme clé (`key`) pour chaque élément de la liste. **En React, chaque élément d'une liste doit avoir une clé unique pour aider React à identifier quels éléments ont changé, sont ajoutés, ou sont supprimés**. Dans ce cas, l'`index` (qui est l'index de l'élément dans le tableau `pokemons`) est utilisé comme clé. Cependant, il est généralement recommandé d'utiliser un identifiant stable comme clé si possible, plutôt que l'index, car l'utilisation de l'index peut causer des problèmes si l'ordre des éléments change.
 - `id` est utilisé pour identifier le Pokémon spécifique sur lequel l'utilisateur a cliqué. Lorsque l'utilisateur clique sur le bouton "-", la fonction `handleClick` est appelée avec l'`id` du Pokémon comme argument. Cette `id` est ensuite utilisée pour déterminer quel Pokémon supprimer de la liste.
@@ -1030,6 +1034,79 @@ const MonComponent = () => {
         setPokemon(copie);
         // console.log(newpokemon);
     }
+
+    // Rendu du composant
+    return (
+        <>
+            <h1 className="maclasstest">Test</h1>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                        </li>
+                )}
+            </ul>
+            <form onSubmit={handleSubmit}>
+                <input ref={inputRef} type="text"/>
+                <button type="submit">+</button>
+            </form>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+https://www.geeksforgeeks.org/how-to-search-the-max-value-of-an-attribute-in-an-array-object/
+
+
+```js
+import React, { useRef, useState } from 'react';
+
+const MonComponent = () => {
+    // state => les états
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ])
+
+    const inputRef = useRef();
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        const newpokemon = inputRef.current.value;
+        // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+        const newId = Math.max(...pokemons.map(pokemon => pokemon.id)) + 1;
+        // Créer une copie du tableau 'pokemons'
+        // const copie = [...pokemons];
+        // Ajouter le nouveau pokemon à la copie avec un 'id' qui est newId + 1
+        // copie.push({ id: newId, nom: newpokemon });
+        const pokeObject = [...pokemons, { id: newId, nom: newpokemon }];
+        // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+        setPokemon(pokeObject);
+        // console.log(newpokemon);
+    }
+
+    // Avec Apply
+    // const handleSubmit = e => {
+    //     e.preventDefault();
+    //     const newId = Math.max.apply(null, pokemons.map(pokemon => pokemon.id)) + 1;
+    // }
 
     // Rendu du composant
     return (
