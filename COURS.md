@@ -300,7 +300,7 @@ export default MonComponent;
 Je crée un composant fonctionnel React appelé `MonComponent`. J'utilise le Hook `useState` pour créer un état `value` initialisé à 1. J'ai également une fonction `incrementer` qui, lorsqu'elle est appelée, affiche dans la console la valeur actuelle de `value` + 1. Dans le rendu de mon composant, j'affiche la valeur actuelle de `value` et j'ai un bouton qui, lorsqu'il est cliqué, appelle la fonction `incrementer`.
 
 > [!NOTE]
-> Hook est une fonction spéciale qui permet d’utiliser les fonctionnalités de React (comme les états et les effets de bord) à l’intérieur des composants fonctionnels. Avant l’introduction des Hooks, ces fonctionnalités n’étaient disponibles que dans les composants de classe. Les Hooks rendent le code plus lisible et facile à comprendre, et permettent de réutiliser l’état et la logique des composants de manière plus efficace.
+> Hook est une fonction spéciale qui permet d'utiliser les fonctionnalités de React (comme les états et les effets de bord) à l'intérieur des composants fonctionnels. Avant l'introduction des Hooks, ces fonctionnalités n'étaient disponibles que dans les composants de classe. Les Hooks rendent le code plus lisible et facile à comprendre, et permettent de réutiliser l'état et la logique des composants de manière plus efficace.
 
 ```js
 const MonComponent = () => {
@@ -425,10 +425,10 @@ export default MonComponent;
 j'utilise l'index comme deuxième argument de la fonction de rappel dans la méthode `map`. Cela me permet d'accéder à l'index actuel de l'élément dans le tableau.
 
 > [!NOTE]
-> En JavaScript, l’opérateur de décomposition (`...`), aussi appelé **spread operator**, permet de prendre les éléments d’un tableau ou les propriétés d’un objet et de les utiliser individuellement. Par exemple, si vous avez un tableau `[1, 2, 3]` et que vous voulez créer un nouveau tableau qui contient tous ces éléments plus un nouvel élément, vous pouvez utiliser ... comme ceci : `[...[1, 2, 3], 4]`. Cela donne `[1, 2, 3, 4]`, où chaque élément du tableau original est utilisé individuellement pour créer le nouveau tableau.
+> En JavaScript, l'opérateur de décomposition (`...`), aussi appelé **spread operator**, permet de prendre les éléments d'un tableau ou les propriétés d'un objet et de les utiliser individuellement. Par exemple, si vous avez un tableau `[1, 2, 3]` et que vous voulez créer un nouveau tableau qui contient tous ces éléments plus un nouvel élément, vous pouvez utiliser ... comme ceci : `[...[1, 2, 3], 4]`. Cela donne `[1, 2, 3, 4]`, où chaque élément du tableau original est utilisé individuellement pour créer le nouveau tableau.
 
-- `index` est utilisé comme clé (`key`) pour chaque élément de la liste. **En React, chaque élément d’une liste doit avoir une clé unique pour aider React à identifier quels éléments ont changé, sont ajoutés, ou sont supprimés**. Dans ce cas, l’`index` (qui est l’index de l’élément dans le tableau `pokemons`) est utilisé comme clé. Cependant, il est généralement recommandé d’utiliser un identifiant stable comme clé si possible, plutôt que l’index, car l’utilisation de l’index peut causer des problèmes si l’ordre des éléments change.
-- `id` est utilisé pour identifier le Pokémon spécifique sur lequel l’utilisateur a cliqué. Lorsque l’utilisateur clique sur le bouton "-", la fonction `handleClick` est appelée avec l’`id` du Pokémon comme argument. Cette `id` est ensuite utilisée pour déterminer quel Pokémon supprimer de la liste.
+- `index` est utilisé comme clé (`key`) pour chaque élément de la liste. **En React, chaque élément d'une liste doit avoir une clé unique pour aider React à identifier quels éléments ont changé, sont ajoutés, ou sont supprimés**. Dans ce cas, l'`index` (qui est l'index de l'élément dans le tableau `pokemons`) est utilisé comme clé. Cependant, il est généralement recommandé d'utiliser un identifiant stable comme clé si possible, plutôt que l'index, car l'utilisation de l'index peut causer des problèmes si l'ordre des éléments change.
+- `id` est utilisé pour identifier le Pokémon spécifique sur lequel l'utilisateur a cliqué. Lorsque l'utilisateur clique sur le bouton "-", la fonction `handleClick` est appelée avec l'`id` du Pokémon comme argument. Cette `id` est ensuite utilisée pour déterminer quel Pokémon supprimer de la liste.
 
 ```js
 import React, { useState } from "react";
@@ -635,6 +635,419 @@ const MonComponent = () => {
                         </li>
                 )}
             </ul>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+```js
+import React, { useState } from 'react';
+
+const MonComponent = () => {
+    // state => les états
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ])
+
+    const [nouveauNom, setNouveauNom] = useState("")
+
+    // fonctions et les constantes => logique
+    // const handleRemove = (id) => {
+    //     // Méthode Filter
+    //     // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
+    //     // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
+    //     // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
+    //     const copie = pokemons.filter(pokemon => pokemon.id !== id);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (id) => {
+    //     // Méthode Splice
+    //     // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+    //     // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+    //     const copie = [...pokemons];
+    //     const index = copie.findIndex(pokemon => pokemon.id === id);
+
+    //     // Vérifie si l'élément a été trouvé. Si 'findIndex' renvoie -1, cela signifie que l'élément n'a pas été trouvé.
+    //     if (index !== -1) {
+    //         // Si l'élément a été trouvé, on utilise la méthode 'splice' pour supprimer l'élément à l'index trouvé du tableau copié
+    //         // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+    //         copie.splice(index, 1);
+    //         setPokemon(copie);
+    //     }
+    // }
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    // const handleRemove = (index) => {
+    //     const copie = [...pokemons];
+    //     copie.splice(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (index) => {
+    //     // Méthode toSpliced
+    //     const copie = pokemons.toSpliced(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    const handleAdd = (nouveauPokemon) => {
+        // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+        const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+        // Créer une copie du tableau 'pokemons'
+        const copie = [...pokemons];
+        // Ajouter le nouveau pokemon à la copie avec un 'id' qui est maxId + 1
+        copie.push({ id: maxId + 1, nom: nouveauPokemon.nom });
+        // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+        setPokemon(copie);
+        // Mettre à jour l'état
+        setNouveauNom();
+    }
+
+    // Rendu du composant
+    // On utilise la méthode 'map' pour itérer sur chaque élément du tableau 'pokemons'
+    // Lorsqu'on clic sur '+', la fonction 'handleAdd' est appelée avec un nouvel objet Pokémons
+    // Lorsqu'on clic sur  '-', la fonction 'handleRemove' est appelée avec l'id du Pokémon actuel
+    // On met l'état (state) 'pokemons' à jour à chaque clic sur les boutons.
+    return (
+        <>
+            <h1 className="maclasstest">Test</h1>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            {/* <button onClick={() => handleAdd({ nom: "Evoli" })}>+</button> */}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                            {/* toSpliced */}
+                            {/* <button onClick={() => handleRemove(index)}>-</button></li> */}
+                        </li>
+                )}
+            </ul>
+            <p>
+                <input type="text" value={nouveauNom} onChange={(e) => setNouveauNom(e.target.value)} />
+                <button onClick={handleAdd}>+</button>
+            </p>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+```js
+import React, { useState } from 'react';
+
+const MonComponent = () => {
+    // state => les états
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ])
+
+    const [nouveauNom, setNouveauNom] = useState("")
+
+    // fonctions et les constantes => logique
+    // const handleRemove = (id) => {
+    //     // Méthode Filter
+    //     // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
+    //     // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
+    //     // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
+    //     const copie = pokemons.filter(pokemon => pokemon.id !== id);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (id) => {
+    //     // Méthode Splice
+    //     // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+    //     // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+    //     const copie = [...pokemons];
+    //     const index = copie.findIndex(pokemon => pokemon.id === id);
+
+    //     // Vérifie si l'élément a été trouvé. Si 'findIndex' renvoie -1, cela signifie que l'élément n'a pas été trouvé.
+    //     if (index !== -1) {
+    //         // Si l'élément a été trouvé, on utilise la méthode 'splice' pour supprimer l'élément à l'index trouvé du tableau copié
+    //         // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+    //         copie.splice(index, 1);
+    //         setPokemon(copie);
+    //     }
+    // }
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    // const handleRemove = (index) => {
+    //     const copie = [...pokemons];
+    //     copie.splice(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (index) => {
+    //     // Méthode toSpliced
+    //     const copie = pokemons.toSpliced(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    // const handleAdd = (nouveauPokemon) => {
+    //     // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+    //     const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+    //     // Créer une copie du tableau 'pokemons'
+    //     const copie = [...pokemons];
+    //     // Ajouter le nouveau pokemon à la copie avec un 'id' qui est maxId + 1
+    //     copie.push({ id: maxId + 1, nom: nouveauPokemon.nom });
+    //     // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+    //     setPokemon(copie);
+    //     // Mettre à jour l'état
+    //     setNouveauNom();
+    // }
+
+    const dontSubmit = (e) => {
+        e.preventDefault();
+        console.log(e);
+    }
+
+    // const addPokemon = (e) => {
+    //     // console.log(e.target.value);
+
+    //     const copie = [...pokemons];
+    //     const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+    //     copie.push({id: maxId +1, nom: e.target.value})
+    // }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+    }
+
+    // Rendu du composant
+    // On utilise la méthode 'map' pour itérer sur chaque élément du tableau 'pokemons'
+    // Lorsqu'on clic sur '+', la fonction 'handleAdd' est appelée avec un nouvel objet Pokémons
+    // Lorsqu'on clic sur  '-', la fonction 'handleRemove' est appelée avec l'id du Pokémon actuel
+    // On met l'état (state) 'pokemons' à jour à chaque clic sur les boutons.
+    return (
+        <>
+            <h1 className="maclasstest">Test</h1>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            {/* <button onClick={() => handleAdd({ nom: "Evoli" })}>+</button> */}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                            {/* toSpliced */}
+                            {/* <button onClick={() => handleRemove(index)}>-</button></li> */}
+                        </li>
+                )}
+            </ul>
+            {/*  <form onSubmit={e => e.preventDefault()}> */}
+            <form onSubmit={dontSubmit}>
+                <input type="text" onChange={addPokemon}/>
+                <button type="submit">+</button>
+            </form>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+```js
+import React, { useState } from 'react';
+
+const MonComponent = () => {
+    // state => les états
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ])
+
+    const [nouveauNom, setNouveauNom] = useState("")
+
+    // fonctions et les constantes => logique
+    // const handleRemove = (id) => {
+    //     // Méthode Filter
+    //     // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
+    //     // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
+    //     // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
+    //     const copie = pokemons.filter(pokemon => pokemon.id !== id);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (id) => {
+    //     // Méthode Splice
+    //     // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+    //     // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+    //     const copie = [...pokemons];
+    //     const index = copie.findIndex(pokemon => pokemon.id === id);
+
+    //     // Vérifie si l'élément a été trouvé. Si 'findIndex' renvoie -1, cela signifie que l'élément n'a pas été trouvé.
+    //     if (index !== -1) {
+    //         // Si l'élément a été trouvé, on utilise la méthode 'splice' pour supprimer l'élément à l'index trouvé du tableau copié
+    //         // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+    //         copie.splice(index, 1);
+    //         setPokemon(copie);
+    //     }
+    // }
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    // const handleRemove = (index) => {
+    //     const copie = [...pokemons];
+    //     copie.splice(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    // const handleRemove = (index) => {
+    //     // Méthode toSpliced
+    //     const copie = pokemons.toSpliced(index, 1);
+    //     setPokemon(copie);
+    // }
+
+    // const handleAdd = (nouveauPokemon) => {
+    //     // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+    //     const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+    //     // Créer une copie du tableau 'pokemons'
+    //     const copie = [...pokemons];
+    //     // Ajouter le nouveau pokemon à la copie avec un 'id' qui est maxId + 1
+    //     copie.push({ id: maxId + 1, nom: nouveauPokemon.nom });
+    //     // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+    //     setPokemon(copie);
+    //     // Mettre à jour l'état
+    //     setNouveauNom();
+    // }
+
+    const dontSubmit = (e) => {
+        e.preventDefault();
+        console.log(e);
+    }
+
+    const addPokemon = (e) => {
+        console.log(e.target.value);
+    }
+
+    // Rendu du composant
+    // On utilise la méthode 'map' pour itérer sur chaque élément du tableau 'pokemons'
+    // Lorsqu'on clic sur '+', la fonction 'handleAdd' est appelée avec un nouvel objet Pokémons
+    // Lorsqu'on clic sur  '-', la fonction 'handleRemove' est appelée avec l'id du Pokémon actuel
+    // On met l'état (state) 'pokemons' à jour à chaque clic sur les boutons.
+    return (
+        <>
+            <h1 className="maclasstest">Test</h1>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            {/* <button onClick={() => handleAdd({ nom: "Evoli" })}>+</button> */}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                            {/* toSpliced */}
+                            {/* <button onClick={() => handleRemove(index)}>-</button></li> */}
+                        </li>
+                )}
+            </ul>
+            <form onSubmit={dontSubmit}>
+                <input type="text" onChange={addPokemon}/>
+                <button type="submit">+</button>
+            </form>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+
+https://fr.legacy.reactjs.org/docs/hooks-reference.html#useref
+https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Math/max
+
+Le useRef n'est accessible qu'à l'intérieur d'un composant.
+
+```js
+import React, { useRef, useState } from 'react';
+
+const MonComponent = () => {
+    // state => les états
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ])
+
+    const inputRef = useRef();
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        const newpokemon = inputRef.current.value;
+        // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+        const maxId = Math.max(...pokemons.map(pokemon => pokemon.id));
+        // Créer une copie du tableau 'pokemons'
+        const copie = [...pokemons];
+        // Ajouter le nouveau pokemon à la copie avec un 'id' qui est maxId + 1
+        copie.push({ id: maxId + 1, nom: newpokemon });
+        // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+        setPokemon(copie);
+        // console.log(newpokemon);
+    }
+
+    // Rendu du composant
+    return (
+        <>
+            <h1 className="maclasstest">Test</h1>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                        </li>
+                )}
+            </ul>
+            <form onSubmit={handleSubmit}>
+                <input ref={inputRef} type="text"/>
+                <button type="submit">+</button>
+            </form>
         </>
     );
 };
