@@ -49,16 +49,17 @@ const MonComponent = (props) => {
     const changeColor = () => {
         setBlack(false);
         setNbr(nbr + 1);
-        console.log(divRef);
+        // console.log(divRef);
         // setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
         divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        
     }
 
     // Rendu du composant
     return (
         <>
-            <h1 className="maclasstest">props.userName</h1>
-            <h2>props.metierName</h2>
+            <h1 className="maclasstest">{props.userName}</h1>
+            <h2>{props.metierName}</h2>
             <ul>
                 {pokemons.map(
                     (el, index) =>
@@ -74,7 +75,7 @@ const MonComponent = (props) => {
                 <button type="submit">+</button>
             </form>
 
-            <div ref={divRef} style={{ height: '90px', width: '90px', background: 'black' }}>
+            <div ref={divRef} style={{ height: '90px', width: '90px', background: black ? 'black' : divRef.current.style.background }}>
 
             </div>
 
