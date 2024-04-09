@@ -10,15 +10,16 @@ const MonComponent = () => {
     ])
 
     // fonctions et les constantes => logique
-    const handleRemove = (id) => {
-        // console.log(el);
-        // Méthode Filter
-        // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
-        // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
-        // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
-        // const copie = pokemons.filter(pokemon => pokemon.id !== id);
-        // setPokemon(copie);
+    // const handleRemove = (id) => {
+    //     // Méthode Filter
+    //     // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
+    //     // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
+    //     // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
+    //     const copie = pokemons.filter(pokemon => pokemon.id !== id);
+    //     setPokemon(copie);
+    // }
 
+    const handleRemove = (id) => {
         // Méthode Splice
         // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
         // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
@@ -33,6 +34,12 @@ const MonComponent = () => {
             setPokemon(copie);
         }
     }
+
+    // const handleRemove = (index) => {
+    //     // Méthode toSpliced
+    //     const copie = pokemons.toSpliced(index, 1);
+    //     setPokemon(copie);
+    // }
 
     const handleAdd = (nouveauPokemon) => {
         // Trouver le 'id' le plus élevé dans le tableau actuel de Pokémons
@@ -57,11 +64,13 @@ const MonComponent = () => {
                 {pokemons.map(
                     (el, index) =>
                         <li key={index}>
-                            {el.nom} 
+                            {el.nom}
                             <button onClick={() => handleAdd({ nom: "Evoli" })}>+</button>
                             <button onClick={() => handleRemove(el.id)}>-</button>
+                            {/* toSpliced */}
+                            {/* <button onClick={() => handleRemove(index)}>-</button></li> */}
                         </li>
-                )}                
+                )}
             </ul>
         </>
     );

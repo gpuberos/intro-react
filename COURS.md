@@ -299,7 +299,7 @@ export default MonComponent;
 
 Je crée un composant fonctionnel React appelé `MonComponent`. J'utilise le Hook `useState` pour créer un état `value` initialisé à 1. J'ai également une fonction `incrementer` qui, lorsqu'elle est appelée, affiche dans la console la valeur actuelle de `value` + 1. Dans le rendu de mon composant, j'affiche la valeur actuelle de `value` et j'ai un bouton qui, lorsqu'il est cliqué, appelle la fonction `incrementer`.
 
-> ![NOTE]
+> [!NOTE]
 > Hook est une fonction spéciale qui permet d’utiliser les fonctionnalités de React (comme les états et les effets de bord) à l’intérieur des composants fonctionnels. Avant l’introduction des Hooks, ces fonctionnalités n’étaient disponibles que dans les composants de classe. Les Hooks rendent le code plus lisible et facile à comprendre, et permettent de réutiliser l’état et la logique des composants de manière plus efficace.
 
 ```js
@@ -424,7 +424,7 @@ export default MonComponent;
 
 j'utilise l'index comme deuxième argument de la fonction de rappel dans la méthode `map`. Cela me permet d'accéder à l'index actuel de l'élément dans le tableau.
 
-> ![NOTE]
+> [!NOTE]
 > En JavaScript, l’opérateur de décomposition (`...`), aussi appelé **spread operator**, permet de prendre les éléments d’un tableau ou les propriétés d’un objet et de les utiliser individuellement. Par exemple, si vous avez un tableau `[1, 2, 3]` et que vous voulez créer un nouveau tableau qui contient tous ces éléments plus un nouvel élément, vous pouvez utiliser ... comme ceci : `[...[1, 2, 3], 4]`. Cela donne `[1, 2, 3, 4]`, où chaque élément du tableau original est utilisé individuellement pour créer le nouveau tableau.
 
 - `index` est utilisé comme clé (`key`) pour chaque élément de la liste. **En React, chaque élément d’une liste doit avoir une clé unique pour aider React à identifier quels éléments ont changé, sont ajoutés, ou sont supprimés**. Dans ce cas, l’`index` (qui est l’index de l’élément dans le tableau `pokemons`) est utilisé comme clé. Cependant, il est généralement recommandé d’utiliser un identifiant stable comme clé si possible, plutôt que l’index, car l’utilisation de l’index peut causer des problèmes si l’ordre des éléments change.
@@ -515,6 +515,43 @@ const MonComponent = () => {
 export default MonComponent;
 ```
 
+**Alternative toSpliced :**
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSpliced
+```js
+import { useState } from "react";
+
+const MonComponent = () => {
+    // state => les etats :
+    const [pokemons, setPokemon] = useState([
+        {id: 1, nom: "Pikachu"},
+        {id: 2, nom: "Bulbizare"},
+        {id: 3, nom: "Rattatak"},
+        {id: 4, nom: "Tortank"},
+        {id: 5, nom: "Dracaufeu"}
+    ]);
+    // fonctions et les constantes => logique :
+    const handleClick = (index) => {
+        const copie = pokemons.toSpliced(index, 1);
+        setPokemon(copie);
+
+    }
+    // le rendu côté front :
+    return (
+        <>
+            <h1 className="maclassTest">test</h1>
+            <ul>
+                {
+                pokemons.map(
+                    (el, index) => <li key={el.id}>{el.nom} <button onClick = { () => handleClick(index)}>-</button></li>
+                )}
+            </ul>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
 Je crée un composant fonctionnel React appelé `MonComponent`. J'utilise le Hook `useState` pour créer un état : `pokemons`, qui est initialisé à un tableau de Pokémons.
 
 J'ai également deux fonctions, `handleRemove` et `handleAdd`. `handleRemove` prend un `id` en argument et supprime le Pokémon correspondant de la liste. Pour ce faire, elle crée une copie du tableau `pokemons`, trouve l'index du Pokémon à supprimer, et utilise la méthode `splice` pour le supprimer de la copie. Ensuite, elle met à jour l'état `pokemons` avec le nouveau tableau.
@@ -536,15 +573,16 @@ const MonComponent = () => {
     ])
 
     // fonctions et les constantes => logique
-    const handleRemove = (id) => {
-        // console.log(el);
-        // Méthode Filter
-        // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
-        // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
-        // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
-        // const copie = pokemons.filter(pokemon => pokemon.id !== id);
-        // setPokemon(copie);
+    // const handleRemove = (id) => {
+    //     // Méthode Filter
+    //     // On utilise la méthode 'filter' pour créer un nouveau tableau qui contient tous les pokemons sauf 
+    //     // celui dont l'id correspond à l'id passé en argument à la fonction 'handleClick'.
+    //     // Puis on met à jour l'état 'pokemons' avec le nouveau tableau 'copie'.
+    //     const copie = pokemons.filter(pokemon => pokemon.id !== id);
+    //     setPokemon(copie);
+    // }
 
+    const handleRemove = (id) => {
         // Méthode Splice
         // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
         // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
@@ -559,6 +597,12 @@ const MonComponent = () => {
             setPokemon(copie);
         }
     }
+
+    // const handleRemove = (index) => {
+    //     // Méthode toSpliced
+    //     const copie = pokemons.toSpliced(index, 1);
+    //     setPokemon(copie);
+    // }
 
     const handleAdd = (nouveauPokemon) => {
         // Trouver le 'id' le plus élevé dans le tableau actuel de Pokémons
@@ -583,11 +627,13 @@ const MonComponent = () => {
                 {pokemons.map(
                     (el, index) =>
                         <li key={index}>
-                            {el.nom} 
+                            {el.nom}
                             <button onClick={() => handleAdd({ nom: "Evoli" })}>+</button>
                             <button onClick={() => handleRemove(el.id)}>-</button>
+                            {/* toSpliced */}
+                            {/* <button onClick={() => handleRemove(index)}>-</button></li> */}
                         </li>
-                )}                
+                )}
             </ul>
         </>
     );
