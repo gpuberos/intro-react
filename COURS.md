@@ -1246,3 +1246,207 @@ const MonComponent = (props) => {
 
 export default MonComponent;
 ```
+
+
+
+## destructuring :
+
+Node : SSR (Server Side Render)
+
+**void** veut dire qu'il n'y a pas de return (retour).
+**any** ça peut retourner n'importe quoi.
+
+metier est de type any
+
+```shell
+node
+
+1+2
+
+let apprenant = 'ligia'
+
+console.log(apprenant)
+
+let formation = { ecole : "Simplon", titre : "DWWM", duree: "7 mois", formateur : "Sofiane" }
+
+console.log(formation.ecole)
+console.log(formation.ecole, formation.titre)
+
+# Destructuring, Objet formation
+# On a décomposer l'objet pour faire des constantes
+const {ecole, titre, duree, formateur} = formation
+console.log(ecole)
+
+let props = {name: "Sofiane", job: "Dev"}
+console.log(props.name, props.job)
+```
+
+src\index.js
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import MonComponent from './MonComponent';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const name = "John Doe";
+const job = "Dev";
+
+root.render(
+  <MonComponent userName={name} metier={job} />
+  // <MonComponent></MonComponent>
+);
+
+reportWebVitals();
+```
+
+src\MonComponent.js
+```js
+import React, { useRef, useState } from 'react';
+
+// Destructuring
+// const MonComponent = ({userName, metier}) => {
+
+// Props
+const MonComponent = (props) => {
+    // state => les états
+
+    const [black, setBlack] = useState(false);
+    const [nbr, setNbr] = useState(0);
+    const [color, setColor] = useState("");
+
+    const [pokemons, setPokemon] = useState([
+        { id: 1, nom: "Pikachu" },
+        { id: 2, nom: "Bulbizzar" },
+        { id: 3, nom: "Dracolosse" },
+        { id: 4, nom: "Dracaufeu" },
+    ]);
+
+    const inputRef = useRef();
+    const divRef = useRef();
+
+    const handleRemove = (id) => {
+        // Méthode Splice
+        // Créer une copie du tableau 'pokemons' en utilisant l'opérateur de décomposition (spread operator)
+        // On utilise la méthode 'findIndex' pour trouver l'index du pokemon dont l'id correspond à l'id passé en argument à la fonction 'handleClick'
+        const index = pokemons.findIndex(pokemon => pokemon.id === id);
+        const copie = [...pokemons];
+        copie.splice(index, 1);
+        setPokemon(copie);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        const newpokemon = inputRef.current.value;
+        // Trouver l'id le plus élevé dans le tableau actuel de Pokémons
+        const newId = Math.max(...pokemons.map(pokemon => pokemon.id)) + 1;
+        // Créer une copie du tableau 'pokemons'
+        // Ajouter le nouveau pokemon à la copie avec un 'id' qui est newId + 1
+        const pokeObject = [...pokemons, { id: newId, nom: newpokemon }];
+        // Mettre à jour l'état 'pokemons' avec le nouveau tableau 'copie'
+        setPokemon(pokeObject);
+        // console.log(newpokemon);
+    }
+
+    // Avec Apply
+    // const handleSubmit = e => {
+    //     e.preventDefault();
+    //     const newId = Math.max.apply(null, pokemons.map(pokemon => pokemon.id)) + 1;
+    // }
+
+    const changeColor = () => {
+        setBlack(false);
+        setNbr(nbr + 1);
+        console.log(divRef);
+        setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
+        // divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+    }
+
+    // if (black) {
+    //     console.log('black');
+    // }
+
+    // black && console.log('black');
+
+    // Rendu du composant
+    return (
+        <>
+            {/* Destructuring */}
+            {/* <h1 className="maclasstest">{userName}</h1>
+            <h2>{metier}</h2> */}
+
+            {/* Props */}
+            <h1 className="maclasstest">{props.userName}</h1>
+            <h2>{props.job}</h2>
+            <ul>
+                {pokemons.map(
+                    (el, index) =>
+                        <li key={index}>
+                            {el.nom}
+                            <button onClick={() => handleRemove(el.id)}>-</button>
+                        </li>
+                )}
+            </ul>
+
+            {/* <div ref={divRef} style={{ height: '90px', width: '90px', background: black && 'black' }}></div> */}
+            <div style={{ height: '90px', width: '90px', background: black ? 'black' : color }}></div>
+
+            <form onSubmit={handleSubmit}>
+                <input ref={inputRef} type="text" />
+                <button type="submit">+</button>
+            </form>
+
+            {/* <button onClick={changeColor}>{black ? 'orange' : 'black'}</button> */}
+            <button onClick={() => setBlack(true)}>black</button>
+            <button onClick={changeColor}>change color</button>
+            <p>Nombre de fois ou on change la couleur : {nbr}</p>
+        </>
+    );
+};
+
+export default MonComponent;
+```
+
+## Creation nouveau composant
+
+rsc
+
+```js
+import React from 'react';
+
+const ChildrenComponent = (props) => {
+    return (
+        <div>
+            {props.children}
+            <p>test</p>
+        </div>
+    );
+};
+
+export default ChildrenComponent;
+```
+
+Dans le premier exemple, vous utilisez le composant `Children` comme une balise orpheline. Cela signifie que vous passez les propriétés `userName` et `metier` directement à `Children` :
+```js
+<>
+  <Children userName={name} metier={job}/>
+</>
+```
+
+Dans le deuxième exemple, vous utilisez `Children` comme un composant conteneur pour `MonComponent`. Ici, `MonComponent` est passé comme un enfant à `Children`, et c’est pourquoi il est référencé par la clé `children` :
+```js
+	<>
+		{/* Ce composant est un element react */}
+		<Children>
+			<MonComponent userName={name} metier={job} />
+		</Children>
+	</>
+```
+En résumé, dans le premier cas, `Children` est utilisé pour afficher des données directement. Dans le deuxième cas, `Children` est utilisé pour envelopper un autre composant, `MonComponent`.
+
+Normalement on a un seul composant App.js.
+
+Redux, Vite (pour alléger l'application).
+Micro Services

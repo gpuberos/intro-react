@@ -1,5 +1,9 @@
 import React, { useRef, useState } from 'react';
 
+// Destructuring
+// const MonComponent = ({userName, metier}) => {
+
+// Props
 const MonComponent = (props) => {
     // state => les états
 
@@ -63,8 +67,13 @@ const MonComponent = (props) => {
     // Rendu du composant
     return (
         <>
+            {/* Destructuring */}
+            {/* <h1 className="maclasstest">{userName}</h1>
+            <h2>{metier}</h2> */}
+
+            {/* Props */}
             <h1 className="maclasstest">{props.userName}</h1>
-            <h2>{props.metierName}</h2>
+            <h2>{props.job}</h2>
             <ul>
                 {pokemons.map(
                     (el, index) =>
