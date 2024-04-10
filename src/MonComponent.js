@@ -49,10 +49,16 @@ const MonComponent = (props) => {
     const changeColor = () => {
         setBlack(false);
         setNbr(nbr + 1);
-        // console.log(divRef);
+        console.log(divRef);
         // setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
         divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
     }
+
+    // if (black) {
+    //     console.log('black');
+    // }
+
+    // black && console.log('black');
 
     // Rendu du composant
     return (
@@ -69,7 +75,7 @@ const MonComponent = (props) => {
                 )}
             </ul>
 
-            <div ref={divRef} style={{ height: '90px', width: '90px', background: 'black' }}></div>
+            <div ref={divRef} style={{ height: '90px', width: '90px', background: black && 'black' }}></div>
 
             <form onSubmit={handleSubmit}>
                 <input ref={inputRef} type="text" />
