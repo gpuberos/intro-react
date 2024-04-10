@@ -52,7 +52,6 @@ const MonComponent = (props) => {
         // console.log(divRef);
         // setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
         divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-        
     }
 
     // Rendu du composant
@@ -70,14 +69,12 @@ const MonComponent = (props) => {
                 )}
             </ul>
 
+            <div ref={divRef} style={{ height: '90px', width: '90px', background: 'black' }}></div>
+
             <form onSubmit={handleSubmit}>
                 <input ref={inputRef} type="text" />
                 <button type="submit">+</button>
             </form>
-
-            <div ref={divRef} style={{ height: '90px', width: '90px', background: black ? 'black' : divRef.current.style.background }}>
-
-            </div>
 
             {/* <button onClick={changeColor}>{black ? 'orange' : 'black'}</button> */}
             <button onClick={() => setBlack(true)}>black</button>
