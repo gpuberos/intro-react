@@ -5,7 +5,7 @@ const MonComponent = (props) => {
 
     const [black, setBlack] = useState(false);
     const [nbr, setNbr] = useState(0);
-    // const [color, setColor] = useState("");
+    const [color, setColor] = useState("");
 
     const [pokemons, setPokemon] = useState([
         { id: 1, nom: "Pikachu" },
@@ -50,8 +50,8 @@ const MonComponent = (props) => {
         setBlack(false);
         setNbr(nbr + 1);
         console.log(divRef);
-        // setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
-        divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        setColor(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)} )`);
+        // divRef.current.style.background = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
     }
 
     // if (black) {
@@ -75,7 +75,8 @@ const MonComponent = (props) => {
                 )}
             </ul>
 
-            <div ref={divRef} style={{ height: '90px', width: '90px', background: black && 'black' }}></div>
+            {/* <div ref={divRef} style={{ height: '90px', width: '90px', background: black && 'black' }}></div> */}
+            <div style={{ height: '90px', width: '90px', background: black ? 'black' : color }}></div>
 
             <form onSubmit={handleSubmit}>
                 <input ref={inputRef} type="text" />
